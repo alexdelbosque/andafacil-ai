@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andafacil — Video Reels para Meta Ads</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0B141A; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
+
+.header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: linear-gradient(180deg, #0F2E25 0%, #0B141A 100%);
+}
+.header h1 { font-size: 28px; margin-bottom: 8px; }
+.header p { color: rgba(255,255,255,0.6); font-size: 14px; }
+.badge { display: inline-block; background: #00A884; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-top: 12px; }
+
+.reels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.reel-card {
+    background: #1a2730;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.reel-card:hover { transform: translateY(-4px); }
+
+.reel-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9/16;
+    background: #000;
+}
+.reel-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px 16px 0 0;
+}
+
+.reel-info { padding: 16px; }
+.reel-info h3 { font-size: 16px; margin-bottom: 6px; }
+.reel-info .product-name { color: #00A884; font-size: 13px; font-weight: 600; }
+.reel-info .angle { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 4px; }
+.reel-info .specs {
+    display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+}
+.reel-info .spec-tag {
+    background: rgba(0,168,132,0.15);
+    color: #00A884;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+}
+
+.nav-links {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+.nav-links a {
+    color: #00A884;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 14px;
+}
+.nav-links a:hover { text-decoration: underline; }
+
+.how-it-works {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 40px;
+}
+.how-it-works h2 { font-size: 20px; margin-bottom: 16px; text-align: center; }
+.how-it-works .step {
+    display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start;
+}
+.how-it-works .step-num {
+    background: #00A884;
+    color: white;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+}
+.how-it-works .step-text { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+.how-it-works .step-text strong { color: white; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🎬 Video Reels — Meta Ads</h1>
+    <p>6 reels generados por IA para Instagram y Facebook</p>
+    <span class="badge">Formato 9:16 • 30 seg • Listos para subir</span>
+</div>
+
+<div class="reels-grid">
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-01-andafacil-pro.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>🦽 "Le devolvimos la libertad"</h3>
+            <span class="product-name">Andafacil Pro — Silla Eléctrica</span>
+            <div class="angle">Ángulo: Emocional / Hijo → Padre</div>
+            <div class="specs">
+                <span class="spec-tag">$18,999</span>
+                <span class="spec-tag">Eléctrica</span>
+                <span class="spec-tag">Plegable</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-02-easygo.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>✈️ "Mi mamá no viajaba hace 3 años"</h3>
+            <span class="product-name">Andafacil EasyGo — Portátil</span>
+            <div class="angle">Ángulo: Liberación / Viajes</div>
+            <div class="specs">
+                <span class="spec-tag">$19,999</span>
+                <span class="spec-tag">16kg</span>
+                <span class="spec-tag">Portátil</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-03-andadera-2en1.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>🚶 "Caminar no debería dar miedo"</h3>
+            <span class="product-name">Andadera 2 en 1</span>
+            <div class="angle">Ángulo: Prevención / Estadísticas</div>
+            <div class="specs">
+                <span class="spec-tag">$6,499</span>
+                <span class="spec-tag">Con asiento</span>
+                <span class="spec-tag">Ligera</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-04-silla-3en1.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>🛋️ "Todo en UN solo producto"</h3>
+            <span class="product-name">Silla 3 en 1 Reclinable</span>
+            <div class="angle">Ángulo: Practicidad / Ahorro</div>
+            <div class="specs">
+                <span class="spec-tag">$8,999</span>
+                <span class="spec-tag">Manual</span>
+                <span class="spec-tag">Reclinable</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-05-pack-2x.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>🔥 "2 sillas por el precio de 1"</h3>
+            <span class="product-name">Pack 2x Todo Terreno</span>
+            <div class="angle">Ángulo: Oferta / Urgencia</div>
+            <div class="specs">
+                <span class="spec-tag">$30,999</span>
+                <span class="spec-tag">45% desc.</span>
+                <span class="spec-tag">2 sillas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="reel-card">
+        <div class="reel-video">
+            <video src="reel-06-andadera-electrica.mp4" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="reel-info">
+            <h3>⚡ "Ya no tiene que dejar de caminar"</h3>
+            <span class="product-name">Andadera Eléctrica Pro</span>
+            <div class="angle">Ángulo: Innovación / Primer en México</div>
+            <div class="specs">
+                <span class="spec-tag">$11,999</span>
+                <span class="spec-tag">5 en 1</span>
+                <span class="spec-tag">Eléctrica</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="how-it-works">
+    <h2>🤖 ¿Cómo se generaron?</h2>
+    <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Crawling</strong> — Se analizaron los 66 productos de andafacil.com y se seleccionaron los 6 más vendidos</div>
+    </div>
+    <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Investigación</strong> — Se investigaron competidores, público objetivo y ángulos emocionales (hijos comprando para padres, etc.)</div>
+    </div>
+    <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Copywriting</strong> — Se generaron 18 campañas (6 productos × 3 ángulos) con hooks, cuerpo y CTA</div>
+    </div>
+    <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Video</strong> — Se generaron los reels con imágenes reales del catálogo, testimonios reales y copy emocional</div>
+    </div>
+    <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>100% automatizado</strong> — Desde el crawling hasta los videos, todo con OpenClaw (ffmpeg + ImageMagick)</div>
+    </div>
+</div>
+
+<div class="nav-links">
+    <a href="index.html">💬 Chatbot WhatsApp</a>
+    <a href="ads/">📊 Campañas Meta</a>
+    <a href="demo.html">📋 Demo Walkthrough</a>
+</div>
+
+</body>
+</html>
