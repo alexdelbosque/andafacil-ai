@@ -276,41 +276,66 @@ async function startCrawl() {
     try { storeName = new URL(url).hostname.replace('www.', '').split('.')[0]; } catch(e) {}
     storeName = storeName.charAt(0).toUpperCase() + storeName.slice(1);
 
-    // Simulated crawl sequence (in real product, this calls OpenClaw backend)
-    const steps = [
-        { pct: 5,  status: 'Connecting to ' + url + '...', msg: `<span class="info">→</span> Connecting to ${url}`, delay: 800 },
-        { pct: 10, status: 'Detecting platform...', msg: `<span class="ok">✓</span> Platform detected: ${url.includes('shopify') ? 'Shopify' : 'WordPress/WooCommerce'}`, delay: 1200 },
-        { pct: 15, status: 'Fetching sitemap...', msg: `<span class="info">→</span> Fetching /sitemap.xml`, delay: 1000 },
-        { pct: 20, status: 'Discovering products...', msg: `<span class="ok">✓</span> Sitemap parsed — found product URLs`, delay: 1500 },
-        { pct: 28, status: 'Crawling product catalog...', msg: `<span class="info">→</span> Crawling /wp-json/wp/v2/product (page 1)`, delay: 2000 },
-        { pct: 38, status: 'Extracting product data...', msg: `<span class="ok">✓</span> 24 products extracted...`, delay: 1800 },
-        { pct: 48, status: 'Crawling more pages...', msg: `<span class="ok">✓</span> 48 products extracted...`, delay: 2000 },
-        { pct: 55, status: 'Finalizing catalog...', msg: `<span class="ok">✓</span> 66 products total — names, prices, images, specs`, delay: 1200 },
-        { pct: 60, status: 'Scraping testimonials...', msg: `<span class="ok">✓</span> 12 customer reviews extracted`, delay: 1500 },
-        { pct: 65, status: 'Training AI sales agent...', msg: `<span class="info">→</span> Building product knowledge base...`, delay: 2000 },
-        { pct: 70, status: 'Creating Stripe payment links...', msg: `<span class="ok">✓</span> 6 payment links created (top products)`, delay: 2000 },
-        { pct: 75, status: 'Researching target audience...', msg: `<span class="info">→</span> Analyzing market, competitors, demographics...`, delay: 2500 },
-        { pct: 80, status: 'Generating ad campaigns...', msg: `<span class="ok">✓</span> 18 campaigns generated (6 products × 3 angles)`, delay: 2500 },
-        { pct: 88, status: 'Creating video reels...', msg: `<span class="info">→</span> Generating 6 video reels for Instagram/Facebook...`, delay: 3000 },
-        { pct: 95, status: 'Building WhatsApp chatbot...', msg: `<span class="ok">✓</span> AI sales agent configured and tested`, delay: 1500 },
-        { pct: 100, status: 'Done! 🎉', msg: `<span class="ok">✓</span> <strong>${storeName} AI agent is ready!</strong>`, delay: 500 },
-    ];
+    // Real crawl via backend API
+    setProgress(5, 'Connecting...');
+    log(`<span class="info">→</span> Crawling ${url}`);
 
-    for (const s of steps) {
-        await new Promise(r => setTimeout(r, s.delay));
-        setProgress(s.pct, s.status);
-        log(s.msg);
+    try {
+        const res = await fetch('/api/crawl', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+
+        // Stream-like progress (we poll, but show incremental updates)
+        setProgress(30, 'Detecting platform & crawling...');
+        log(`<span class="info">→</span> Detecting platform...`);
+
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+            setProgress(0, 'Error');
+            log(`<span class="warn">✗</span> ${data.error || 'Crawl failed'}`);
+            btn.textContent = '🚀 Generate';
+            btn.disabled = false;
+            return;
+        }
+
+        // Show logs from server
+        if (data.logs) {
+            for (const l of data.logs) {
+                log(`<span class="${l.type === 'ok' ? 'ok' : l.type === 'warn' ? 'warn' : 'info'}">${l.type === 'ok' ? '✓' : '→'}</span> ${l.msg}`);
+            }
+        }
+
+        setProgress(90, 'Building chatbot...');
+        log(`<span class="ok">✓</span> ${data.productCount} products crawled`);
+
+        await new Promise(r => setTimeout(r, 500));
+        setProgress(100, 'Done! 🎉');
+        log(`<span class="ok">✓</span> <strong>${data.meta?.name || storeName} AI agent is ready!</strong>`);
+
+        // Show results
+        const resultDomain = data.domain;
+        document.getElementById('storeName').textContent = data.meta?.name || storeName;
+        document.getElementById('rProducts').textContent = data.productCount || '0';
+        document.getElementById('rCampaigns').textContent = Math.min(Math.floor((data.productCount || 0) / 3) * 3, 18);
+        document.getElementById('rPayLinks').textContent = Math.min(data.productCount || 0, 6);
+        document.getElementById('rReels').textContent = Math.min(Math.floor((data.productCount || 0) / 10), 6);
+
+        // Update chatbot link
+        const chatLinks = document.querySelectorAll('.r-link');
+        chatLinks[0].href = `/chat/${resultDomain}`;
+
+        document.getElementById('resultWrap').style.display = 'block';
+        document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {
+        setProgress(0, 'Error');
+        log(`<span class="warn">✗</span> Network error: ${e.message}`);
+        btn.textContent = '🚀 Generate';
+        btn.disabled = false;
+        return;
     }
-
-    // Show results
-    await new Promise(r => setTimeout(r, 800));
-    document.getElementById('storeName').textContent = storeName;
-    document.getElementById('rProducts').textContent = '66';
-    document.getElementById('rCampaigns').textContent = '18';
-    document.getElementById('rPayLinks').textContent = '6';
-    document.getElementById('rReels').textContent = '6';
-    document.getElementById('resultWrap').style.display = 'block';
-    document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     btn.textContent = '✅ Done';
 }

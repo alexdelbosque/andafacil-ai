@@ -1,0 +1,43 @@
+{
+  "domain": "kemosabe.com",
+  "url": "https://www.kemosabe.com",
+  "platform": "nextjs",
+  "meta": {
+    "name": "Kemo Sabe®: High",
+    "favicon": "https://www.kemosabe.com/assets/images/favicon.png",
+    "description": "Kemo Sabe® offers upscale, high-end western wear for men and women. Shop cowboy hats, boots, buckles and other custom western goods.",
+    "color": "transparent"
+  },
+  "categories": [
+    "mobilePhone",
+    "phone"
+  ],
+  "productCount": 2,
+  "crawledAt": "2026-02-16T02:19:48.133Z",
+  "products": [
+    {
+      "name": "Mobile Phone",
+      "price": "",
+      "priceRaw": 0,
+      "image": "",
+      "images": [],
+      "description": "",
+      "category": "mobilePhone",
+      "url": "https://www.kemosabe.com",
+      "inStock": true,
+      "tags": []
+    },
+    {
+      "name": "Phone",
+      "price": "",
+      "priceRaw": 0,
+      "image": "",
+      "images": [],
+      "description": "",
+      "category": "phone",
+      "url": "https://www.kemosabe.com",
+      "inStock": true,
+      "tags": []
+    }
+  ]
+}
