@@ -14,12 +14,17 @@ const TESTIMONIALS = [
     { name: "Daniel P.", text: "Es una compañía muy seria y cumple con sus productos que son de buena calidad", date: "Diciembre 2023" }
 ];
 
+// ─── Stripe Payment Links (real) ───
+const STRIPE_LINKS = {};
+let stripeLinksLoaded = false;
+
 // ─── State ───
 let conversationHistory = [];
 let isProcessing = false;
 let currentProduct = null;
 let purchaseState = null;
 let orderData = {};
+let demoMode = false;
 
 // ─── Initialize ───
 async function init() {
@@ -28,6 +33,20 @@ async function init() {
         if (resp.ok) PRODUCTS = await resp.json();
     } catch (e) {
         console.warn('Could not load products.json, using defaults');
+    }
+    try {
+        const resp = await fetch('stripe-links.json');
+        if (resp.ok) {
+            const links = await resp.json();
+            Object.assign(STRIPE_LINKS, links);
+            stripeLinksLoaded = true;
+        }
+    } catch (e) {
+        console.warn('No stripe links loaded');
+    }
+    // Check for demo mode
+    if (window.location.hash === '#demo') {
+        demoMode = true;
     }
     renderProducts();
     // Add WhatsApp encrypted notice
@@ -413,27 +432,48 @@ async function handlePurchaseFlow(text) {
                 purchaseState = 'paying';
                 await delay(2000);
 
-                const mockId = 'plink_' + Date.now().toString(36);
-                const payUrl = `https://buy.stripe.com/${mockId}`;
+                // Find real Stripe link for this product
+                let payUrl = '';
+                const pName = (currentProduct.name || '').toLowerCase();
+                if (pName.includes('pro') && pName.includes('silla') && pName.includes('eléctrica') || pName.includes('electrica') && pName.includes('pro')) {
+                    payUrl = (STRIPE_LINKS['andafacil-pro-silla'] || {}).url || '';
+                } else if (pName.includes('easy') || pName.includes('portátil') || pName.includes('portatil') && pName.includes('eléctrica')) {
+                    payUrl = (STRIPE_LINKS['andafacil-easygo'] || {}).url || '';
+                } else if (pName.includes('andadera') && (pName.includes('eléctrica') || pName.includes('electrica'))) {
+                    payUrl = (STRIPE_LINKS['andafacil-andadera-electrica'] || {}).url || '';
+                } else if (pName.includes('2 en 1') || pName.includes('2en1')) {
+                    payUrl = (STRIPE_LINKS['andadera-2en1'] || {}).url || '';
+                } else if (pName.includes('3 en 1') || pName.includes('3en1') || pName.includes('reclinable')) {
+                    payUrl = (STRIPE_LINKS['silla-3en1'] || {}).url || '';
+                } else if (pName.includes('pack') || pName.includes('2x')) {
+                    payUrl = (STRIPE_LINKS['pack-2x-todo-terreno'] || {}).url || '';
+                }
+                // Fallback to first available link
+                if (!payUrl && stripeLinksLoaded) {
+                    const firstKey = Object.keys(STRIPE_LINKS)[0];
+                    if (firstKey) payUrl = STRIPE_LINKS[firstKey].url;
+                }
+                if (!payUrl) payUrl = 'https://buy.stripe.com/demo';
 
-                let html = `¡Listo! Aquí tienes tu link de pago seguro 🔒:\n\n`;
+                let html = `¡Listo! Aquí tienes tu link de pago seguro 🔒\n\n`;
                 html += `<a href="${payUrl}" class="btn-pay" target="_blank">💳 Pagar ${currentProduct.price || ''}</a>\n\n`;
-                html += `Aceptamos:\n<ul>
-<li>💳 Tarjeta de crédito/débito</li>
-<li>🏪 OXXO</li>
-<li>🏦 Transferencia SPEI</li>
-</ul>\n\n`;
-                html += `Una vez que completes el pago, escríbeme <strong>"ya pagué"</strong> y te pido tu dirección de envío aquí mismo. ✅`;
+                html += `Aceptamos:\n• 💳 Tarjeta de crédito/débito\n• 🏪 OXXO\n• 🏦 Transferencia SPEI\n\n`;
+                html += `Cuando completes el pago, escríbeme *"ya pagué"* y te pido tu dirección de envío aquí mismo ✅\n\n`;
+                html += `<div class="quick-actions">
+<span class="quick-action" onclick="sendQuick('Ya pagué')">✅ Ya pagué</span>
+<span class="quick-action" onclick="sendQuick('Simular pago (demo)')">🎬 Demo: simular pago</span>
+</div>`;
 
                 addBotMessage(html);
             }
             break;
 
         case 'paying':
-            if (tl.includes('pagué') || tl.includes('pague') || tl.includes('ya pagu') || tl.includes('listo') || tl.includes('pago completado') || tl.includes('pagado')) {
+            if (tl.includes('pagué') || tl.includes('pague') || tl.includes('ya pagu') || tl.includes('listo') || tl.includes('pago completado') || tl.includes('pagado') || tl.includes('simular') || tl.includes('demo')) {
                 purchaseState = 'address_name';
                 await delay(1000);
-                addBotMessage('¡Pago recibido! ✅🎉\n\nAhora necesito tu dirección de envío.\n\n¿Cuál es el <strong>nombre completo</strong> de quien recibe el paquete?');
+                const demoNote = (tl.includes('simular') || tl.includes('demo')) ? '\n\n_🎬 Modo demo — simulando pago completado_\n' : '';
+                addBotMessage(`¡Pago recibido! ✅🎉${demoNote}\n\nAhora necesito tu dirección de envío para programar la entrega.\n\n¿Cuál es el *nombre completo* de quien recibe el paquete?`);
             }
             break;
 
