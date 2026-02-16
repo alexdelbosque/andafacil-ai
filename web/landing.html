@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClawCommerce — AI Sales Agent for Any Store</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#09090b;color:#e4e4e7;min-height:100vh;overflow-x:hidden}
+
+/* Hero */
+.hero{position:relative;text-align:center;padding:80px 24px 60px;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 70%);pointer-events:none}
+.logo{font-size:32px;font-weight:900;margin-bottom:8px;letter-spacing:-1px}
+.logo span{background:linear-gradient(135deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);color:#a78bfa;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,5vw,60px);font-weight:900;line-height:1.05;margin-bottom:16px;letter-spacing:-2px}
+.hero h1 .grad{background:linear-gradient(135deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:18px;color:#71717a;max-width:560px;margin:0 auto 40px;line-height:1.6}
+
+/* URL Input */
+.url-box{max-width:640px;margin:0 auto;position:relative}
+.url-input-wrap{display:flex;background:#18181b;border:1.5px solid #27272a;border-radius:16px;overflow:hidden;transition:border-color .2s}
+.url-input-wrap:focus-within{border-color:#8b5cf6}
+.url-input-wrap input{flex:1;background:none;border:none;padding:18px 20px;font-size:16px;color:white;font-family:inherit;outline:none}
+.url-input-wrap input::placeholder{color:#52525b}
+.url-input-wrap button{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:white;border:none;padding:0 28px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s;white-space:nowrap}
+.url-input-wrap button:hover{opacity:.9}
+.url-input-wrap button:disabled{opacity:.5;cursor:not-allowed}
+.url-hint{color:#52525b;font-size:12px;margin-top:10px}
+.url-hint span{color:#a78bfa}
+.url-examples{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.url-ex{background:#18181b;border:1px solid #27272a;color:#a1a1aa;padding:4px 12px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s}
+.url-ex:hover{border-color:#8b5cf6;color:#a78bfa}
+
+/* Progress */
+.progress-wrap{max-width:640px;margin:30px auto 0;display:none}
+.progress-bar{background:#27272a;border-radius:8px;height:6px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#8b5cf6,#06b6d4);height:100%;width:0%;transition:width .5s ease;border-radius:8px}
+.progress-status{color:#a1a1aa;font-size:13px;margin-top:10px;text-align:center}
+.progress-log{max-width:640px;margin:16px auto 0;background:#18181b;border:1px solid #27272a;border-radius:12px;padding:16px;max-height:200px;overflow-y:auto;font-family:'SF Mono',monospace;font-size:12px;color:#71717a;display:none;line-height:1.8}
+.progress-log .ok{color:#22c55e}
+.progress-log .info{color:#06b6d4}
+.progress-log .warn{color:#eab308}
+
+/* How it works */
+.how{max-width:1000px;margin:0 auto;padding:80px 24px 60px}
+.how h2{text-align:center;font-size:32px;font-weight:800;margin-bottom:12px;letter-spacing:-1px}
+.how .sub{text-align:center;color:#71717a;margin-bottom:50px;font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.step-card{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:28px;transition:all .2s}
+.step-card:hover{border-color:#8b5cf6;transform:translateY(-2px)}
+.step-icon{font-size:32px;margin-bottom:14px}
+.step-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.step-card p{color:#71717a;font-size:13px;line-height:1.6}
+.step-tag{display:inline-block;background:rgba(139,92,246,0.1);color:#a78bfa;padding:2px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-top:10px}
+
+/* Demo showcase */
+.showcase{max-width:1000px;margin:0 auto;padding:0 24px 80px}
+.showcase h2{text-align:center;font-size:28px;font-weight:800;margin-bottom:40px;letter-spacing:-1px}
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.demo-card{background:#18181b;border:1px solid #27272a;border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:all .2s;display:block;cursor:pointer}
+.demo-card:hover{border-color:#8b5cf6;transform:translateY(-2px)}
+.demo-card .icon{font-size:28px;margin-bottom:10px}
+.demo-card h3{font-size:15px;font-weight:600;margin-bottom:4px;color:white}
+.demo-card p{font-size:12px;color:#71717a;line-height:1.5}
+.demo-card .built{color:#a78bfa;font-size:11px;margin-top:8px;font-weight:500}
+
+/* Footer */
+.footer{text-align:center;padding:40px 24px;border-top:1px solid #18181b;color:#3f3f46;font-size:13px}
+.footer a{color:#8b5cf6;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* Result page */
+.result-wrap{display:none;max-width:1000px;margin:40px auto 0;padding:0 24px}
+.result-header{text-align:center;margin-bottom:30px}
+.result-header h2{font-size:28px;font-weight:800;margin-bottom:6px}
+.result-header p{color:#71717a;font-size:14px}
+.result-stats{display:flex;justify-content:center;gap:30px;margin:20px 0 30px;flex-wrap:wrap}
+.r-stat{text-align:center}
+.r-stat .num{font-size:32px;font-weight:800;background:linear-gradient(135deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.r-stat .lbl{font-size:11px;color:#71717a;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.result-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.r-link{background:#18181b;border:1px solid #27272a;border-radius:12px;padding:20px;text-align:center;text-decoration:none;color:white;transition:all .2s;cursor:pointer}
+.r-link:hover{border-color:#8b5cf6;transform:translateY(-2px)}
+.r-link .emoji{font-size:28px;margin-bottom:8px}
+.r-link h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.r-link p{font-size:11px;color:#71717a}
+
+/* Mobile */
+@media(max-width:600px){
+    .hero{padding:50px 16px 40px}
+    .url-input-wrap{flex-direction:column}
+    .url-input-wrap button{padding:14px}
+    .hero-stats{gap:20px}
+    .steps{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="logo">🐾 <span>ClawCommerce</span></div>
+    <div class="hero-badge">⚡ Powered by OpenClaw</div>
+    <h1>Turn any store into an<br><span class="grad">AI sales machine</span></h1>
+    <p>Paste your Shopify or WordPress store URL. We'll crawl your catalog, build a WhatsApp sales agent, create Stripe payments, and generate Meta ad campaigns — in minutes.</p>
+
+    <div class="url-box">
+        <div class="url-input-wrap">
+            <input type="url" id="storeUrl" placeholder="https://your-store.com" autocomplete="url">
+            <button id="goBtn" onclick="startCrawl()">🚀 Generate</button>
+        </div>
+        <div class="url-hint">Works with <span>WordPress/WooCommerce</span> and <span>Shopify</span> stores</div>
+        <div class="url-examples">
+            <span class="url-ex" onclick="pickExample('https://andafacil.com')">andafacil.com</span>
+            <span class="url-ex" onclick="pickExample('https://allbirds.com')">allbirds.com</span>
+            <span class="url-ex" onclick="pickExample('https://gymshark.com')">gymshark.com</span>
+        </div>
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-status" id="progressStatus">Initializing...</div>
+    </div>
+    <div class="progress-log" id="progressLog"></div>
+</div>
+
+<!-- Result Section -->
+<div class="result-wrap" id="resultWrap">
+    <div class="result-header">
+        <h2>✅ <span id="storeName">Your Store</span> is ready!</h2>
+        <p>AI agent trained on your full catalog</p>
+    </div>
+    <div class="result-stats">
+        <div class="r-stat"><div class="num" id="rProducts">0</div><div class="lbl">Products</div></div>
+        <div class="r-stat"><div class="num" id="rCampaigns">0</div><div class="lbl">Ad Campaigns</div></div>
+        <div class="r-stat"><div class="num" id="rPayLinks">0</div><div class="lbl">Pay Links</div></div>
+        <div class="r-stat"><div class="num" id="rReels">0</div><div class="lbl">Video Reels</div></div>
+    </div>
+    <div class="result-links">
+        <a class="r-link" href="index.html">
+            <div class="emoji">💬</div>
+            <h4>WhatsApp Chatbot</h4>
+            <p>AI sales agent that knows your catalog</p>
+        </a>
+        <a class="r-link" href="ads/">
+            <div class="emoji">📊</div>
+            <h4>Meta Ad Campaigns</h4>
+            <p>Instagram & Facebook creatives</p>
+        </a>
+        <a class="r-link" href="reels.html">
+            <div class="emoji">🎬</div>
+            <h4>Video Reels</h4>
+            <p>Ready-to-post 9:16 videos</p>
+        </a>
+        <a class="r-link" href="demo.html">
+            <div class="emoji">📋</div>
+            <h4>Demo Walkthrough</h4>
+            <p>Step-by-step guided demo</p>
+        </a>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="how" id="howItWorks">
+    <h2>How it works</h2>
+    <div class="sub">From URL to fully operational AI sales agent in 4 steps</div>
+    <div class="steps">
+        <div class="step-card">
+            <div class="step-icon">🕷️</div>
+            <h3>1. Crawl Your Store</h3>
+            <p>We scan your WordPress/WooCommerce or Shopify store via public APIs. Products, prices, images, descriptions, categories — everything extracted automatically.</p>
+            <span class="step-tag">No API keys needed</span>
+        </div>
+        <div class="step-card">
+            <div class="step-icon">🧠</div>
+            <h3>2. Train AI Agent</h3>
+            <p>Your product catalog becomes the brain of a conversational sales agent. It understands your inventory, recommends products based on needs, and answers questions naturally.</p>
+            <span class="step-tag">Conversational AI</span>
+        </div>
+        <div class="step-card">
+            <div class="step-icon">💳</div>
+            <h3>3. Connect Payments</h3>
+            <p>Stripe payment links are created for your top products. Customers pay without leaving the chat — credit cards, bank transfers, even cash at OXXO (Mexico).</p>
+            <span class="step-tag">Stripe Checkout</span>
+        </div>
+        <div class="step-card">
+            <div class="step-icon">📣</div>
+            <h3>4. Generate Campaigns</h3>
+            <p>AI researches your market, writes ad copy, creates video scripts, and generates ready-to-post Reels for Instagram and Facebook. Full campaign strategy included.</p>
+            <span class="step-tag">Meta Ads ready</span>
+        </div>
+        <div class="step-card">
+            <div class="step-icon">📱</div>
+            <h3>5. Deploy to WhatsApp</h3>
+            <p>Connect your WhatsApp Business number and your AI agent goes live. Customers chat, browse, buy — all inside WhatsApp. 24/7, no human needed.</p>
+            <span class="step-tag">WhatsApp Business API</span>
+        </div>
+        <div class="step-card">
+            <div class="step-icon">📈</div>
+            <h3>6. Auto-Optimize</h3>
+            <p>Weekly catalog re-crawl, seasonal campaign triggers, A/B ad rotation, and performance-based product recommendations. It gets smarter over time.</p>
+            <span class="step-tag">Always improving</span>
+        </div>
+    </div>
+</div>
+
+<!-- Live Demo -->
+<div class="showcase">
+    <h2>🔥 Live Example: Andafacil</h2>
+    <div class="demo-grid">
+        <a class="demo-card" href="index.html">
+            <div class="icon">💬</div>
+            <h3>WhatsApp Sales Agent</h3>
+            <p>AI physiotherapist that recommends mobility products based on patient needs</p>
+            <div class="built">66 products · Mexican Spanish</div>
+        </a>
+        <a class="demo-card" href="ads/">
+            <div class="icon">📊</div>
+            <h3>18 Meta Ad Campaigns</h3>
+            <p>6 products × 3 emotional angles with full video scripts and targeting</p>
+            <div class="built">Instagram + Facebook ready</div>
+        </a>
+        <a class="demo-card" href="reels.html">
+            <div class="icon">🎬</div>
+            <h3>6 Video Reels</h3>
+            <p>30-second vertical videos with hooks, testimonials, and CTAs</p>
+            <div class="built">9:16 format · Auto-generated</div>
+        </a>
+        <a class="demo-card" href="demo.html">
+            <div class="icon">📋</div>
+            <h3>Full Demo Walkthrough</h3>
+            <p>Step-by-step guide: browse → recommend → pay → deliver</p>
+            <div class="built">Complete purchase flow</div>
+        </a>
+    </div>
+</div>
+
+<div class="footer">
+    Built with 🐾 <a href="https://openclaw.ai">OpenClaw</a> · <a href="https://github.com/alexdelbosque/andafacil-ai">View Source on GitHub</a>
+</div>
+
+<script>
+function pickExample(url) {
+    document.getElementById('storeUrl').value = url;
+}
+
+function log(msg, cls = '') {
+    const el = document.getElementById('progressLog');
+    el.style.display = 'block';
+    el.innerHTML += `<div class="${cls}">${msg}</div>`;
+    el.scrollTop = el.scrollHeight;
+}
+
+function setProgress(pct, status) {
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressStatus').textContent = status;
+}
+
+async function startCrawl() {
+    const url = document.getElementById('storeUrl').value.trim();
+    if (!url) { document.getElementById('storeUrl').focus(); return; }
+
+    const btn = document.getElementById('goBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Working...';
+
+    const wrap = document.getElementById('progressWrap');
+    wrap.style.display = 'block';
+    document.getElementById('progressLog').innerHTML = '';
+
+    // Extract store name
+    let storeName = 'Your Store';
+    try { storeName = new URL(url).hostname.replace('www.', '').split('.')[0]; } catch(e) {}
+    storeName = storeName.charAt(0).toUpperCase() + storeName.slice(1);
+
+    // Simulated crawl sequence (in real product, this calls OpenClaw backend)
+    const steps = [
+        { pct: 5,  status: 'Connecting to ' + url + '...', msg: `<span class="info">→</span> Connecting to ${url}`, delay: 800 },
+        { pct: 10, status: 'Detecting platform...', msg: `<span class="ok">✓</span> Platform detected: ${url.includes('shopify') ? 'Shopify' : 'WordPress/WooCommerce'}`, delay: 1200 },
+        { pct: 15, status: 'Fetching sitemap...', msg: `<span class="info">→</span> Fetching /sitemap.xml`, delay: 1000 },
+        { pct: 20, status: 'Discovering products...', msg: `<span class="ok">✓</span> Sitemap parsed — found product URLs`, delay: 1500 },
+        { pct: 28, status: 'Crawling product catalog...', msg: `<span class="info">→</span> Crawling /wp-json/wp/v2/product (page 1)`, delay: 2000 },
+        { pct: 38, status: 'Extracting product data...', msg: `<span class="ok">✓</span> 24 products extracted...`, delay: 1800 },
+        { pct: 48, status: 'Crawling more pages...', msg: `<span class="ok">✓</span> 48 products extracted...`, delay: 2000 },
+        { pct: 55, status: 'Finalizing catalog...', msg: `<span class="ok">✓</span> 66 products total — names, prices, images, specs`, delay: 1200 },
+        { pct: 60, status: 'Scraping testimonials...', msg: `<span class="ok">✓</span> 12 customer reviews extracted`, delay: 1500 },
+        { pct: 65, status: 'Training AI sales agent...', msg: `<span class="info">→</span> Building product knowledge base...`, delay: 2000 },
+        { pct: 70, status: 'Creating Stripe payment links...', msg: `<span class="ok">✓</span> 6 payment links created (top products)`, delay: 2000 },
+        { pct: 75, status: 'Researching target audience...', msg: `<span class="info">→</span> Analyzing market, competitors, demographics...`, delay: 2500 },
+        { pct: 80, status: 'Generating ad campaigns...', msg: `<span class="ok">✓</span> 18 campaigns generated (6 products × 3 angles)`, delay: 2500 },
+        { pct: 88, status: 'Creating video reels...', msg: `<span class="info">→</span> Generating 6 video reels for Instagram/Facebook...`, delay: 3000 },
+        { pct: 95, status: 'Building WhatsApp chatbot...', msg: `<span class="ok">✓</span> AI sales agent configured and tested`, delay: 1500 },
+        { pct: 100, status: 'Done! 🎉', msg: `<span class="ok">✓</span> <strong>${storeName} AI agent is ready!</strong>`, delay: 500 },
+    ];
+
+    for (const s of steps) {
+        await new Promise(r => setTimeout(r, s.delay));
+        setProgress(s.pct, s.status);
+        log(s.msg);
+    }
+
+    // Show results
+    await new Promise(r => setTimeout(r, 800));
+    document.getElementById('storeName').textContent = storeName;
+    document.getElementById('rProducts').textContent = '66';
+    document.getElementById('rCampaigns').textContent = '18';
+    document.getElementById('rPayLinks').textContent = '6';
+    document.getElementById('rReels').textContent = '6';
+    document.getElementById('resultWrap').style.display = 'block';
+    document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    btn.textContent = '✅ Done';
+}
+</script>
+
+</body>
+</html>
