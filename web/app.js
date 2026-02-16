@@ -187,7 +187,7 @@ async function processInput(text) {
 
     // ── Fallback — try to be helpful ──
     await delay(rand(800,1200));
-    addBot(`Mmm, déjame ver cómo te puedo ayudar mejor. ¿Estás buscando un producto de movilidad? ¿Silla de ruedas, andadera, bastón? Cuéntame y te guío 😊`);
+    addBot(`¿Buscas silla, andadera o bastón? Cuéntame 😊`);
 }
 
 // ─── Assessment — The Physiotherapist Questions ───
@@ -515,32 +515,25 @@ async function handleRecommendation(text, tl) {
     // Check for category browsing
     if (tl.includes('silla') || tl.includes('electrica') || tl.includes('ruedas')) {
         const chairs = PRODUCTS.filter(p => p.name.toLowerCase().includes('silla') && p.name.toLowerCase().includes('electrica')).slice(0, 3);
-        await delay(rand(1000,1500));
-        let msg = `Estas son nuestras sillas de ruedas eléctricas más populares:\n\n`;
-        chairs.forEach((p, i) => {
-            msg += `${i+1}. *${p.name}*\n💰 ${p.price || 'Consultar'}\n\n`;
-        });
-        msg += `¿Cuál te interesa? 😊`;
-        addBot(msg);
+        await delay(rand(800,1200));
+        addBot(`Las más vendidas 🔥`);
+        for (const ch of chairs) { await delay(rand(400,800)); addProductCard(ch, 0); }
         return;
     }
 
     if (tl.includes('andadera') || tl.includes('caminar') || tl.includes('andar')) {
         const walkers = PRODUCTS.filter(p => p.name.toLowerCase().includes('andadera')).slice(0, 3);
-        await delay(rand(1000,1500));
-        let msg = `Estas son nuestras andaderas más vendidas:\n\n`;
-        walkers.forEach((p, i) => {
-            msg += `${i+1}. *${p.name}*\n💰 ${p.price || 'Consultar'}\n\n`;
-        });
-        msg += `¿De cuál te cuento más? 😊`;
-        addBot(msg);
+        await delay(rand(800,1200));
+        addBot(`Nuestras andaderas más populares 👇`);
+        for (const w of walkers) { await delay(rand(400,800)); addProductCard(w, 0); }
         return;
     }
 
-    // Go back to assessment if we don't understand
-    await delay(rand(800,1400));
-    addBot(`Cuéntame más para poder orientarte mejor — ¿qué tipo de producto buscas?\n\n<div class="quick-actions">
-<span class="quick-action" onclick="sendQuick('Sillas de ruedas eléctricas')">🦽 Sillas eléctricas</span>
+    await delay(rand(600,1000));
+    addBot(`¿Qué buscas? 👇
+
+<div class="quick-actions">
+<span class="quick-action" onclick="sendQuick('Sillas eléctricas')">🦽 Sillas</span>
 <span class="quick-action" onclick="sendQuick('Andaderas')">🚶 Andaderas</span>
 <span class="quick-action" onclick="sendQuick('Bastones')">🦯 Bastones</span>
 </div>`);
@@ -568,14 +561,7 @@ async function startPurchase() {
     context.order = { product: p };
     await delay(rand(1000,1500));
 
-    let msg = `¡Excelente elección! 🙌\n\n`;
-    msg += `📦 *${p.name}*\n`;
-    if (p.price) msg += `💰 *${p.price}*\n`;
-    msg += `🚚 Envío a todo México incluido\n`;
-    msg += `🛡️ Garantía de 1 año\n`;
-    msg += `🔄 30 días de devolución\n\n`;
-    msg += `¿Te genero el link de pago seguro? 🔒`;
-    addBot(msg);
+    addBot(`🙌 *¡Excelente!*\n\n📦 *${p.name}*\n${p.price ? `💰 *${p.price}*\n` : ''}🚚 Envío gratis\n🛡️ Garantía 1 año\n\n¿Genero link de pago? 🔒`);
     await delay(300);
     addBot(`<div class="quick-actions">
 <span class="quick-action" onclick="sendQuick('Sí, genérame el link de pago')">✅ Sí, generar link</span>
@@ -588,7 +574,7 @@ async function handlePurchase(text, tl) {
         context.purchaseState = null;
         context.stage = 'product_detail';
         await delay(800);
-        addBot(`¡Sin problema! 😊 ¿Qué duda tienes? Estoy para ayudarte.`);
+        addBot(`Sin problema 😊 ¿Qué duda tienes?`);
         return;
     }
 
@@ -598,11 +584,7 @@ async function handlePurchase(text, tl) {
                 context.purchaseState = 'paying';
                 await delay(rand(1500,2500));
                 const payUrl = findStripeLink(context.selectedProduct);
-                let msg = `Aquí tienes tu link de pago seguro 🔒\n\n`;
-                msg += `<a href="${payUrl}" class="btn-pay" target="_blank">💳 Pagar ${context.selectedProduct.price || ''}</a>\n\n`;
-                msg += `Aceptamos:\n• 💳 Tarjeta de crédito/débito\n• 🏪 Pago en OXXO\n• 🏦 Transferencia SPEI\n\n`;
-                msg += `Cuando completes el pago, escríbeme *"ya pagué"* ✅`;
-                addBot(msg);
+                addBot(`🔒 *Link de pago seguro:*\n\n<a href="${payUrl}" class="btn-pay" target="_blank">💳 Pagar ${context.selectedProduct.price || ''}</a>\n\n💳 Tarjeta · 🏪 OXXO · 🏦 SPEI`);
                 await delay(300);
                 addBot(`<div class="quick-actions">
 <span class="quick-action" onclick="sendQuick('Ya pagué')">✅ Ya pagué</span>
@@ -616,7 +598,7 @@ async function handlePurchase(text, tl) {
                 context.purchaseState = 'addr_name';
                 const isDemo = tl.includes('simular') || tl.includes('demo');
                 await delay(1000);
-                addBot(`${isDemo ? '_🎬 Modo demo — simulando pago completado_\n\n' : ''}¡Pago recibido! ✅🎉\n\nAhora necesito los datos de envío. ¿Cuál es el *nombre completo* de quien recibe?`);
+                addBot(`${isDemo ? '_🎬 Demo_\n\n' : ''}✅ *¡Pago recibido!*\n\n¿*Nombre completo* de quien recibe?`);
             }
             break;
 
@@ -624,7 +606,7 @@ async function handlePurchase(text, tl) {
             context.order.name = text;
             context.purchaseState = 'addr_street';
             await delay(rand(500,800));
-            addBot(`Perfecto, ${text.split(' ')[0]} 👍 ¿*Dirección completa*?\n\n_(Calle, número, colonia)_`);
+            addBot(`👍 ¿*Dirección*?\n_(Calle, número, colonia)_`);
             break;
 
         case 'addr_street':
@@ -652,7 +634,7 @@ async function handlePurchase(text, tl) {
             context.order.phone = text;
             context.purchaseState = 'addr_notes';
             await delay(rand(500,800));
-            addBot(`¿Alguna *instrucción especial* para la entrega?\n\n_(Edificio, piso, entre calles, o "no" si no hay)_`);
+            addBot(`¿*Instrucciones de entrega*?\n_(o "no" si no hay)_`);
             break;
 
         case 'addr_notes':
@@ -661,20 +643,11 @@ async function handlePurchase(text, tl) {
             await delay(rand(1500,2000));
 
             const p = context.selectedProduct;
-            let msg = `¡Tu pedido está confirmado! 🎉📦\n\n`;
-            msg += `*📋 Resumen:*\n`;
-            msg += `📦 ${p.name}\n`;
-            if (p.price) msg += `💰 ${p.price}\n`;
-            msg += `💳 Pago: ✅ Completado\n\n`;
-            msg += `*📍 Envío a:*\n`;
-            msg += `👤 ${context.order.name}\n`;
-            msg += `🏠 ${context.order.street}\n`;
-            msg += `📍 ${context.order.city}, CP ${context.order.zip}\n`;
-            msg += `📞 ${context.order.phone}\n`;
-            if (context.order.notes !== 'Ninguna') msg += `📝 ${context.order.notes}\n`;
-            msg += `\n🚚 *Tiempo estimado: 3-7 días hábiles*\n\n`;
-            msg += `¡Gracias por confiar en *Andafacil*! 🙌 Si tienes cualquier duda sobre el armado o uso del producto, escríbeme aquí. ¡Estamos para ti! 💚`;
-            addBot(msg);
+            addBot(`🎉 *¡Pedido confirmado!*\n\n📦 ${p.name}\n${p.price ? `💰 ${p.price}\n` : ''}💳 ✅ Pagado`);
+            await delay(500);
+            addBot(`📍 *Envío a:*\n\n👤 ${context.order.name}\n🏠 ${context.order.street}\n📍 ${context.order.city}, CP ${context.order.zip}\n📞 ${context.order.phone}${context.order.notes !== 'Ninguna' ? `\n📝 ${context.order.notes}` : ''}\n\n🚚 *3-7 días hábiles*`);
+            await delay(500);
+            addBot(`¡Gracias por confiar en *Andafacil*! 🙌💚`);
 
             // Reset
             context.purchaseState = null;
