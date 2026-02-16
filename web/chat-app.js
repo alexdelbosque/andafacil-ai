@@ -614,7 +614,102 @@ window.selectProduct = function(index) {
 function findProduct(text) {
     const tl = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     let best = null, bestScore = 0;
+    const stopWords = ['the','and','for','show','me','want','see','with','this','that','have','from','more','about','some','like'];
     for (const p of PRODUCTS) {
         const pn = p.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         let score = 0;
-        const words = tl.split(/\s+/).filter(w => w.length > 2 &&
+        const words = tl.split(/\s+/).filter(w => w.length > 2 && !stopWords.includes(w));
+        const pWords = pn.split(/\s+/);
+        for (const w of words) {
+            for (const pw of pWords) {
+                if (pw.includes(w) || w.includes(pw)) score += 10;
+            }
+        }
+        // Also check description and tags
+        if (p.description) {
+            const desc = p.description.toLowerCase();
+            for (const w of words) { if (desc.includes(w)) score += 3; }
+        }
+        if (score > bestScore) { bestScore = score; best = p; }
+    }
+    return bestScore >= 20 ? best : null;
+}
+
+function findCategory(text) {
+    for (const cat of CATEGORIES) {
+        if (text.includes(cat.toLowerCase())) return cat;
+    }
+    // Fuzzy match
+    const words = text.split(/\s+/).filter(w => w.length > 2);
+    for (const cat of CATEGORIES) {
+        const catWords = cat.toLowerCase().split(/\s+/);
+        for (const w of words) {
+            for (const cw of catWords) {
+                if (cw.includes(w) || w.includes(cw)) return cat;
+            }
+        }
+    }
+    return null;
+}
+
+function searchProducts(keywords) {
+    const scored = PRODUCTS.map(p => {
+        let score = 0;
+        const text = `${p.name} ${p.description} ${p.category} ${(p.tags || []).join(' ')}`.toLowerCase();
+        for (const kw of keywords) {
+            if (text.includes(kw)) score += 10;
+            if (p.name.toLowerCase().includes(kw)) score += 20;
+        }
+        return { p, score };
+    });
+    return scored.filter(s => s.score > 0).sort((a, b) => b.score - a.score).map(s => s.p);
+}
+
+// ─── DOM Helpers ───
+
+function getTime() {
+    return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function addBot(html) {
+    const c = document.getElementById('messages');
+    const d = document.createElement('div');
+    d.className = 'msg bot';
+    html = html.replace(/\*([^*]+)\*/g, '<strong>$1</strong>');
+    html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+    const sender = STORE_META.name || 'Store';
+    d.innerHTML = `<div class="msg-bubble"><span class="msg-sender">${esc(sender)}</span>${html}<span class="msg-time">${getTime()}</span></div>`;
+    c.appendChild(d);
+    c.scrollTop = c.scrollHeight;
+}
+
+function addUser(text) {
+    const c = document.getElementById('messages');
+    const d = document.createElement('div');
+    d.className = 'msg user';
+    d.innerHTML = `<div class="msg-bubble">${esc(text)}<span class="msg-time">${getTime()} <span class="msg-ticks"><svg viewBox="0 0 16 11"><path d="M11.071.653a.457.457 0 00-.304-.102.493.493 0 00-.381.178l-6.19 7.636-2.95-2.95a.456.456 0 00-.304-.178h-.076a.457.457 0 00-.305.178l-.609.61a.456.456 0 000 .609l3.838 3.838c.178.178.381.254.584.254a.652.652 0 00.508-.279l6.999-8.61a.456.456 0 00.076-.381.456.456 0 00-.178-.305l-.708-.498zM14.757.653a.457.457 0 00-.305-.102.493.493 0 00-.381.178l-6.19 7.636-1.143-1.143-.356.356-.508.559 2.007 2.007c.178.178.381.254.584.254a.652.652 0 00.508-.279l6.999-8.61a.456.456 0 00.076-.381.456.456 0 00-.178-.305l-.708-.498z"/></svg></span></span></div>`;
+    c.appendChild(d);
+    c.scrollTop = c.scrollHeight;
+}
+
+function showTyping() {
+    document.getElementById('headerStatus').textContent = 'typing...';
+    const c = document.getElementById('messages');
+    const d = document.createElement('div');
+    d.className = 'typing'; d.id = 'typingIndicator';
+    d.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+    c.appendChild(d);
+    c.scrollTop = c.scrollHeight;
+}
+
+function hideTyping() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+    document.getElementById('headerStatus').textContent = 'online';
+}
+
+function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+document.addEventListener('DOMContentLoaded', init);

@@ -329,6 +329,105 @@ async function crawlNextJS(baseUrl, html, logs) {
     return products;
 }
 
+// ─── Sitemap Crawler ───
+async function crawlSitemap(baseUrl, logs) {
+    const products = [];
+    try {
+        logs.push({ msg: 'Trying sitemap.xml...', type: 'info' });
+
+        // Fetch only first 500KB of sitemap to avoid OOM
+        const sitemapData = await new Promise((resolve, reject) => {
+            const lib = baseUrl.startsWith('https') ? https : http;
+            const req = lib.get(`${baseUrl}/sitemap.xml`, {
+                headers: { 'User-Agent': 'Mozilla/5.0 ClawCommerce/1.0' },
+                timeout: 10000,
+            }, (res) => {
+                if (res.statusCode !== 200) { resolve(''); return; }
+                let data = '';
+                const MAX_SIZE = 500 * 1024; // 500KB max
+                res.on('data', chunk => {
+                    data += chunk;
+                    if (data.length > MAX_SIZE) { res.destroy(); resolve(data); }
+                });
+                res.on('end', () => resolve(data));
+            });
+            req.on('error', () => resolve(''));
+            req.on('timeout', () => { req.destroy(); resolve(''); });
+        });
+
+        if (!sitemapData || !sitemapData.includes('<url')) {
+            logs.push({ msg: 'No sitemap found', type: 'info' });
+            return [];
+        }
+
+        // Parse product URLs using simple regex (no full XML parse)
+        const MAX_SITEMAP_PRODUCTS = 150;
+        const locRegex = /<loc>([^<]+)<\/loc>/g;
+        const imgRegex = /<image:loc>([^<]+)<\/image:loc>/g;
+
+        // Extract all URLs and images at once
+        let match;
+        const urls = [];
+        while ((match = locRegex.exec(sitemapData)) !== null) urls.push(match[1]);
+
+        const images = {};
+        // Re-scan for image locations near product URLs
+        const blocks = sitemapData.split('<url>');
+        for (const block of blocks) {
+            const locM = block.match(/<loc>([^<]+)<\/loc>/);
+            const imgM = block.match(/<image:loc>([^<]+)<\/image:loc>/);
+            if (locM && imgM) images[locM[1]] = imgM[1];
+        }
+
+        for (const loc of urls) {
+            if (products.length >= MAX_SITEMAP_PRODUCTS) break;
+            // Detect product URLs by common patterns
+            if (!loc.match(/\/products?\/|\/shop\/|\/item\//)) continue;
+
+            const slug = loc.split('/').pop().replace(/\.html?$/, '');
+            const name = slug
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+            // Try to guess category from slug
+            let category = 'General';
+            if (slug.match(/boot/i)) category = 'Boots';
+            else if (slug.match(/hat/i)) category = 'Hats';
+            else if (slug.match(/buckle/i)) category = 'Buckles';
+            else if (slug.match(/belt/i)) category = 'Belts';
+            else if (slug.match(/knife|knives/i)) category = 'Knives';
+            else if (slug.match(/jewel|ring|necklace|bracelet|earring/i)) category = 'Jewelry';
+            else if (slug.match(/shirt|jacket|vest|coat|dress|top|pant|jean/i)) category = 'Apparel';
+            else if (slug.match(/scarf|bandana|poncho|wrap/i)) category = 'Accessories';
+            else if (slug.match(/bag|purse|tote|wallet/i)) category = 'Bags';
+            else if (slug.match(/bolo/i)) category = 'Bolo Ties';
+            else if (slug.match(/band/i)) category = 'Hat Bands';
+            else if (slug.match(/candle/i)) category = 'Home';
+            else if (slug.match(/cap|trucker/i)) category = 'Caps';
+
+            products.push({
+                name,
+                price: '',
+                priceRaw: 0,
+                image: images[loc] || '',
+                images: images[loc] ? [images[loc]] : [],
+                description: '',
+                category,
+                url: loc,
+                inStock: true,
+                tags: [],
+            });
+        }
+
+        if (products.length > 0) {
+            logs.push({ msg: `✓ Found ${products.length} products via sitemap`, type: 'ok' });
+        }
+    } catch (e) {
+        logs.push({ msg: `Sitemap error: ${e.message}`, type: 'warn' });
+    }
+    return products;
+}
+
 async function crawlGenericHTML(baseUrl, html, logs) {
     const products = [];
     try {
@@ -394,7 +493,18 @@ async function extractStoreMeta(baseUrl, html) {
         if (!html) { const r = await fetchUrl(baseUrl); if (r.status === 200) html = r.data; }
         if (!html) return meta;
         const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
-        if (titleMatch) meta.name = titleMatch[1].split(/[|\-–—]/)[0].trim();
+        if (titleMatch) {
+            // Split on pipe or long dashes only, not colons or hyphens within brand names
+            let name = titleMatch[1].split(/[|–—]|(?:\s+-\s+)/)[0].trim();
+            // Remove trailing ":" if it got cut
+            name = name.replace(/:$/, '').trim();
+            // If name is still too long (>30 chars), take first part before colon
+            if (name.length > 30) {
+                const colonPart = name.split(':')[0].trim();
+                if (colonPart.length >= 3) name = colonPart;
+            }
+            meta.name = name;
+        }
         const favMatch = html.match(/<link[^>]+rel=["'](?:icon|shortcut icon|apple-touch-icon)["'][^>]+href=["']([^"']+)["']/i)
             || html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["'](?:icon|shortcut icon|apple-touch-icon)["']/i);
         if (favMatch) { let f = favMatch[1]; if (f.startsWith('//')) f = 'https:' + f; else if (f.startsWith('/')) f = baseUrl + f; meta.favicon = f; }
@@ -459,10 +569,20 @@ app.post('/api/crawl', async (req, res) => {
                 break;
             case 'nextjs':
                 products = await crawlNextJS(url, detection.html, logs);
+                // Fallback: try sitemap for Next.js sites
+                if (products.length < 10) {
+                    const sitemapProducts = await crawlSitemap(url, logs);
+                    if (sitemapProducts.length > products.length) products = sitemapProducts;
+                }
                 if (products.length === 0) products = await crawlGenericHTML(url, detection.html, logs);
                 break;
             default:
                 if (detection.html) products = await crawlGenericHTML(url, detection.html, logs);
+                // Fallback: try sitemap
+                if (products.length < 10) {
+                    const sitemapProducts = await crawlSitemap(url, logs);
+                    if (sitemapProducts.length > products.length) products = sitemapProducts;
+                }
                 break;
         }
 

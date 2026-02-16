@@ -116,7 +116,7 @@ body{font-family:'Inter',sans-serif;background:#09090b;color:#e4e4e7;min-height:
         <div class="url-examples">
             <span class="url-ex" onclick="pickExample('https://andafacil.com')">andafacil.com</span>
             <span class="url-ex" onclick="pickExample('https://allbirds.com')">allbirds.com</span>
-            <span class="url-ex" onclick="pickExample('https://gymshark.com')">gymshark.com</span>
+            <span class="url-ex" onclick="pickExample('https://www.kemosabe.com')">kemosabe.com</span>
         </div>
     </div>
 
@@ -281,17 +281,33 @@ async function startCrawl() {
     log(`<span class="info">→</span> Crawling ${url}`);
 
     try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 120000); // 2 min timeout
+
         const res = await fetch('/api/crawl', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
+            body: JSON.stringify({ url }),
+            signal: controller.signal
         });
+        clearTimeout(timeout);
 
         // Stream-like progress (we poll, but show incremental updates)
         setProgress(30, 'Detecting platform & crawling...');
         log(`<span class="info">→</span> Detecting platform...`);
 
-        const data = await res.json();
+        const text = await res.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (parseErr) {
+            setProgress(0, 'Error');
+            log(`<span class="warn">✗</span> Server returned invalid response. Try again.`);
+            console.error('Parse error:', text.substring(0, 200));
+            btn.textContent = '🚀 Generate';
+            btn.disabled = false;
+            return;
+        }
 
         if (!res.ok || data.error) {
             setProgress(0, 'Error');
