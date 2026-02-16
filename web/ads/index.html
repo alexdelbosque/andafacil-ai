@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andafacil — Meta Ad Creatives Preview</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#F5F5F5;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh}
+.ph{background:linear-gradient(135deg,#1a1a2e,#0a0a14,#16213e);padding:40px 24px 20px;text-align:center;border-bottom:1px solid #262626;position:sticky;top:0;z-index:100}
+.ph h1{font-size:28px;font-weight:800;background:linear-gradient(90deg,#E0F1FF,#0095F6,#E0F1FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.ph .sub{color:#A8A8A8;font-size:13px;margin-bottom:20px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:16px}
+.tabs{display:inline-flex;background:#1a1a1a;border-radius:12px;overflow:hidden}
+.tab{padding:12px 28px;font-size:14px;font-weight:600;color:#A8A8A8;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:all .3s}
+.tab:hover{color:#F5F5F5}.tab.active{background:#0095F6;color:#fff}
+.sb{display:flex;justify-content:center;gap:40px;padding:16px 24px;background:#111;border-bottom:1px solid #1a1a1a;flex-wrap:wrap}
+.st{text-align:center}.sn{font-size:28px;font-weight:800;color:#0095F6}.sl{font-size:11px;color:#A8A8A8;text-transform:uppercase;letter-spacing:1px}
+.sec{display:none;padding:30px 24px 60px;max-width:1400px;margin:0 auto}.sec.active{display:block}
+.stitle{font-size:22px;font-weight:700;margin-bottom:8px}.ssub{font-size:14px;color:#A8A8A8;margin-bottom:32px}
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:28px;justify-items:center}
+.ic{background:#262626;border-radius:12px;overflow:hidden;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:transform .2s}
+.ic:hover{transform:translateY(-4px)}
+.ih{display:flex;align-items:center;padding:12px 14px;gap:10px}
+.iav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0095F6,#00376b);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.iu{flex:1}.iun{font-size:13px;font-weight:600}.isp{font-size:11px;color:#A8A8A8}.imn{font-size:18px;cursor:pointer}
+.ii{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#111}
+.ii img{width:100%;height:100%;object-fit:cover;display:block}
+.iov{position:absolute;bottom:0;left:0;right:0;padding:60px 18px 18px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.ihk{font-size:20px;font-weight:800;color:#fff;line-height:1.25;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.ipb{position:absolute;top:16px;right:16px;background:#ED4956;color:#fff;padding:6px 14px;border-radius:20px;font-size:14px;font-weight:700;text-align:center}
+.ipb .o{text-decoration:line-through;font-size:11px;opacity:.8;display:block}
+.idb{position:absolute;top:16px;left:16px;background:#00C853;color:#fff;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.icr{display:flex;align-items:center;padding:10px 14px;border-top:1px solid #363636;border-bottom:1px solid #363636;gap:10px;background:#1a1a1a}
+.icl{font-size:12px;color:#A8A8A8;white-space:nowrap}.ich{font-size:13px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icb{background:#0095F6;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
+.iac{display:flex;align-items:center;padding:10px 14px;gap:16px}.iai{font-size:22px;cursor:pointer}.iac .sp{flex:1}
+.ilk{padding:4px 14px 6px;font-size:13px;font-weight:600}
+.icp{padding:6px 14px 14px;font-size:13px;line-height:1.4}.icp b{font-weight:600}.mr{color:#A8A8A8;cursor:pointer}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:28px;justify-items:center}
+.fc{background:#242526;border-radius:12px;overflow:hidden;width:100%;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:transform .2s}
+.fc:hover{transform:translateY(-4px)}
+.fh{display:flex;align-items:center;padding:14px 16px;gap:10px}
+.fav{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#0095F6,#00376b);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.fui{flex:1}.fn{font-size:14px;font-weight:600;color:#E4E6EB}.fmt{font-size:12px;color:#B0B3B8}.fmn{color:#B0B3B8;font-size:20px;cursor:pointer}
+.ftx{padding:0 16px 12px;font-size:14px;color:#E4E6EB;line-height:1.45}.fsm{color:#B0B3B8;cursor:pointer}
+.fi{position:relative;width:100%;aspect-ratio:1.91/1;overflow:hidden;background:#111}.fi img{width:100%;height:100%;object-fit:cover}
+.fl{background:#3A3B3C;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.fli{flex:1}.fld{font-size:12px;color:#B0B3B8;text-transform:uppercase}.flh{font-size:15px;font-weight:600;color:#E4E6EB;margin:2px 0}.fds{font-size:13px;color:#B0B3B8}
+.fcb{background:#4B4C4E;color:#E4E6EB;border:none;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
+.frc{display:flex;align-items:center;padding:8px 16px;justify-content:space-between;border-bottom:1px solid #3A3B3C}
+.fri{display:flex;align-items:center;gap:2px;font-size:16px}.frcnt{font-size:14px;color:#B0B3B8;margin-left:6px}.fsh{font-size:14px;color:#B0B3B8}
+.fab{display:flex;padding:4px 16px;gap:4px}
+.fbb{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:6px;background:transparent;border:none;color:#B0B3B8;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.fbb:hover{background:#3A3B3C}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:32px;justify-items:center}
+.rs{background:#1a1a1a;border-radius:16px;overflow:hidden;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.rtb{background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);padding:16px 20px;display:flex;align-items:center;gap:10px}
+.rtb h3{font-size:16px;font-weight:700;color:#fff;flex:1}
+.rfm{font-size:12px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.3);padding:3px 10px;border-radius:10px}
+.rf{display:flex;border-bottom:1px solid #262626}.rf:hover{background:#222}.rf:last-child{border-bottom:none}
+.rtm{width:80px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;border-right:1px solid #262626;background:#111}
+.rtm .s{font-size:18px;font-weight:800;color:#0095F6}.rtm .l{font-size:10px;color:#A8A8A8;text-transform:uppercase}
+.rct{flex:1;padding:14px 16px}
+.rel{font-size:12px;font-weight:700;color:#F77737;margin-bottom:4px;text-transform:uppercase}
+.rvo{font-size:13px;color:#F5F5F5;font-style:italic;line-height:1.4;margin-bottom:4px}
+.rov{font-size:12px;color:#A8A8A8;line-height:1.3}.rov strong{color:#E0F1FF}
+.rvi{font-size:11px;color:#666;margin-top:4px;line-height:1.3}
+@media(max-width:768px){.ig,.fg,.rg{grid-template-columns:1fr}.ph h1{font-size:20px}.tab{padding:10px 16px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="ph">
+  <div class="badge">✨ AI-Generated Campaign</div>
+  <h1>🎬 Andafacil Meta Ad Creatives — Generated by AI</h1>
+  <p class="sub">6 productos · 3 variaciones por producto · Instagram, Facebook &amp; Reels · Campaña completa para producción</p>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('ig')">📸 Instagram Ads</button>
+    <button class="tab" onclick="switchTab('fb')">📘 Facebook Ads</button>
+    <button class="tab" onclick="switchTab('rl')">📱 Reels Format</button>
+  </div>
+</div>
+<div class="sb">
+  <div class="st"><div class="sn">6</div><div class="sl">Productos</div></div>
+  <div class="st"><div class="sn">18</div><div class="sl">Variaciones</div></div>
+  <div class="st"><div class="sn">3</div><div class="sl">Formatos</div></div>
+  <div class="st"><div class="sn">$4,899</div><div class="sl">Desde MXN</div></div>
+  <div class="st"><div class="sn">45%</div><div class="sl">Max Descuento</div></div>
+</div>
+
+<div class="sec active" id="sec-ig">
+  <h2 class="stitle">📸 Instagram Feed Ads — Variación A: "El Regalo" 🎁</h2>
+  <p class="ssub">Ángulo emocional: Hijos adultos comprando para sus padres · Format: Feed 4:5 · Dark Mode</p>
+  <div class="ig">
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2024/11/andafacil-pro-silla-de-ruedas-electrica.png" loading="lazy"><div class="idb">32% OFF</div><div class="ipb"><span class="o">$24,999</span>$16,999</div><div class="iov"><div class="ihk">Le devolvimos la libertad a mi mamá 🥺</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">Regálale libertad a quien más amas</div><button class="icb">Enviar mensaje</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 2,847 Me gusta</div>
+<div class="icp"><b>andafacil</b> 🎁 Tu mamá cuidó de ti toda la vida. Hoy puedes regalarle algo que de verdad cambie la suya. Desde $16,999. ✅ 136 kg ✅ 10 km autonomía ✅ Todo terreno 🇲🇽 <span class="mr">...más</span></div>
+</div>
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2025/03/andafacil-easy-go.png" loading="lazy"><div class="idb">43% OFF</div><div class="ipb"><span class="o">$34,999</span>$19,999</div><div class="iov"><div class="ihk">Mi mamá no viajaba hace 3 años… hasta hoy ✈️</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">Que vuelva a viajar contigo ✈️</div><button class="icb">Enviar mensaje</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 3,214 Me gusta</div>
+<div class="icp"><b>andafacil</b> ✈️ Tu mamá dejó de viajar porque "ya no puede caminar mucho." Esta silla pesa 16 kg y cabe en una cajuela. Desde $19,999. 🔹 La más ligera de México 🔹 Joystick 360° <span class="mr">...más</span></div>
+</div>
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2023/08/Main-Image-Amazon-No-Logo.jpg" loading="lazy"><div class="idb">17% OFF</div><div class="ipb"><span class="o">$42,000</span>$34,999</div><div class="iov"><div class="ihk">5 productos en 1. El regalo que lo cambia todo 🤯</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">5 en 1: El regalo que lo cambia todo</div><button class="icb">Enviar mensaje</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 1,932 Me gusta</div>
+<div class="icp"><b>andafacil</b> 🎁 5 productos en 1. Andadera, silla, scooter, rollator y apoyo para hemiplejia. $34,999. ⚡ Motor 2x250W 🔋 20 km autonomía ⏱️ Carga en 3h <span class="mr">...más</span></div>
+</div>
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2023/05/Main-Image-Amazon-No-Logo.jpg" loading="lazy"><div class="idb">35% OFF</div><div class="ipb"><span class="o">$9,999</span>$6,499</div><div class="iov"><div class="ihk">Por menos de $6,500 le cambias la vida a tu mamá 💛</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">Andadera + Silla desde $6,499</div><button class="icb">Comprar ahora</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 4,521 Me gusta</div>
+<div class="icp"><b>andafacil</b> 🎁 Por menos de $6,500 puedes cambiarle la vida a tu mamá. Andadera + silla en un solo producto. Envío GRATIS. ✅ 10.3 kg ✅ Aluminio ✅ Todo terreno <span class="mr">...más</span></div>
+</div>
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2024/04/Main-Image-Amazon-No-Logo.jpg" loading="lazy"><div class="idb">9% OFF</div><div class="ipb"><span class="o">$5,400</span>$4,899</div><div class="iov"><div class="ihk">Todo lo que necesita para estar cómodo — en un solo producto 🛋️</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">3 en 1: Silla + reclinable + orinal</div><button class="icb">Comprar ahora</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 1,687 Me gusta</div>
+<div class="icp"><b>andafacil</b> 🎁 Silla reclinable con orinal integrado. Solo $4,899. 🛋️ Reclina 90°–180° 💺 Cojín transpirable 🚿 Orinal integrado <span class="mr">...más</span></div>
+</div>
+<div class="ic">
+<div class="ih"><div class="iav">🦽</div><div class="iu"><div class="iun">andafacil</div><div class="isp">Patrocinado</div></div><div class="imn">···</div></div>
+<div class="ii"><img src="https://andafacil.com/wp-content/uploads/2025/07/Main-Image-Amazon-No-Logo.jpg" loading="lazy"><div class="idb">45% OFF 🔥</div><div class="ipb"><span class="o">$54,999</span>$29,999</div><div class="iov"><div class="ihk">2 sillas eléctricas por el precio de 1. ¡Ahorra $25,000! 🔥</div></div></div>
+<div class="icr"><div class="icl">andafacil.com</div><div class="ich">2 sillas eléctricas × $29,999 🔥</div><button class="icb">Enviar mensaje</button></div>
+<div class="iac"><span class="iai">🤍</span><span class="iai">💬</span><span class="iai">↗️</span><span class="sp"></span><span class="iai">🔖</span></div>
+<div class="ilk">❤️ 5,103 Me gusta</div>
+<div class="icp"><b>andafacil</b> 📦 2 sillas eléctricas por $29,999 (antes $54,999). Una para la casa. Otra para viajar. ¡Ahorra $25,000! 🏠 Pro: 136 kg ✈️ EasyGo: 16 kg <span class="mr">...más</span></div>
+</div></div></div>
+<div class="sec" id="sec-fb">
+<h2 class="stitle">📘 Facebook Feed Ads — Top 3 Productos</h2>
+<p class="ssub">Facebook dark mode · Headline + Description below image · CTA button right</p>
+<div class="fg">
+<div class="fc">
+<div class="fh"><div class="fav">🦽</div><div class="fui"><div class="fn">Andafacil®</div><div class="fmt">Patrocinado · 🌎</div></div><div class="fmn">···</div></div>
+<div class="ftx">🎁 Tu mamá te cargó cuando no podías caminar. Ahora tú puedes regalarle la libertad de moverse sola.<br><br>La Andafacil Pro es la silla de ruedas eléctrica #1 en México. Con llantas todo terreno diseñadas para calles mexicanas.<br><br>✅ Soporta hasta 136 kg · ✅ Autonomía de 10 km · ✅ Plegable<br><br>⭐⭐⭐⭐⭐ "Le ayudó mucho a mi papá" — Carlos R. <span class="fsm">Ver más</span></div>
+<div class="fi"><img src="https://andafacil.com/wp-content/uploads/2023/07/Main-Image-Amazon-No-Logo-1.jpg" loading="lazy"></div>
+<div class="fl"><div class="fli"><div class="fld">andafacil.com</div><div class="flh">Regálale libertad a quien más amas</div><div class="fds">Envío GRATIS 🚚 · Antes $24,999 → Ahora $16,999</div></div><button class="fcb">Enviar mensaje</button></div>
+<div class="frc"><div><span class="fri">👍❤️😢</span><span class="frcnt">1.2K</span></div><div class="fsh">347 comentarios · 892 compartidos</div></div>
+<div class="fab"><button class="fbb">👍 Me gusta</button><button class="fbb">💬 Comentar</button><button class="fbb">↗️ Compartir</button></div>
+</div><div class="fc">
+<div class="fh"><div class="fav">🦽</div><div class="fui"><div class="fn">Andafacil®</div><div class="fmt">Patrocinado · 🌎</div></div><div class="fmn">···</div></div>
+<div class="ftx">✈️ ¿Cuándo fue la última vez que tu mamá viajó contigo?<br><br>La Andafacil EasyGo pesa solo 16 kg, se pliega en segundos y cabe en la cajuela de cualquier coche. Y sí — es apta para avión con certificado de batería de litio incluido.<br><br>🔹 Solo 16 kg 🔹 Joystick 360° 🔹 Frenos electromagnéticos 🔹 10 km autonomía<br><br>⭐⭐⭐⭐⭐ "No pesa, fácil de cerrar, resistente" — Pam O. <span class="fsm">Ver más</span></div>
+<div class="fi"><img src="https://andafacil.com/wp-content/uploads/2025/03/andafacil-easy-go-7.png" loading="lazy"></div>
+<div class="fl"><div class="fli"><div class="fld">andafacil.com</div><div class="flh">Que vuelva a viajar contigo ✈️</div><div class="fds">16 kg. Plegable. Apta avión. · Antes $34,999 → Ahora $19,999</div></div><button class="fcb">Enviar mensaje</button></div>
+<div class="frc"><div><span class="fri">👍❤️😢</span><span class="frcnt">2.1K</span></div><div class="fsh">512 comentarios · 1.3K compartidos</div></div>
+<div class="fab"><button class="fbb">👍 Me gusta</button><button class="fbb">💬 Comentar</button><button class="fbb">↗️ Compartir</button></div>
+</div><div class="fc">
+<div class="fh"><div class="fav">🦽</div><div class="fui"><div class="fn">Andafacil®</div><div class="fmt">Patrocinado · 🌎</div></div><div class="fmn">···</div></div>
+<div class="ftx">📦 ¿Una silla de ruedas eléctrica para la casa Y otra para viajar? Ahora puedes tener las dos.<br><br>🏠 Andafacil Pro — 136 kg, todo terreno, sólida como roca<br>✈️ EasyGo — 16 kg, se pliega en 1 segundo, apta avión<br><br>🔥 Antes: $54,999 → Pack especial: $29,999 (¡Ahorro de $25,000!)<br><br>⭐⭐⭐⭐⭐ "He comprado 3 productos" — Daniel P.<br>⚠️ Solo 1 pack disponible en stock. <span class="fsm">Ver más</span></div>
+<div class="fi"><img src="https://andafacil.com/wp-content/uploads/2025/07/Main-Image-Amazon-No-Logo.jpg" loading="lazy"></div>
+<div class="fl"><div class="fli"><div class="fld">andafacil.com</div><div class="flh">2 sillas eléctricas × $29,999 🔥</div><div class="fds">Ahorra $25,000. Envío GRATIS. ⚠️ Último disponible</div></div><button class="fcb">Enviar mensaje</button></div>
+<div class="frc"><div><span class="fri">👍❤️😢</span><span class="frcnt">3.4K</span></div><div class="fsh">721 comentarios · 2.1K compartidos</div></div>
+<div class="fab"><button class="fbb">👍 Me gusta</button><button class="fbb">💬 Comentar</button><button class="fbb">↗️ Compartir</button></div>
+</div></div></div>
+<div class="sec" id="sec-rl">
+<h2 class="stitle">📱 Reels Format — Video Storyboards (9:16)</h2>
+<p class="ssub">Shot-by-shot breakdown para producción de video vertical · 2 productos destacados</p>
+<div class="rg">
+<div class="rs">
+<div class="rtb"><span>🎬</span><h3>Andafacil Pro — "El Regalo"</h3><span class="rfm">9:16 · 30s</span></div>
+<div class="rf">
+<div class="rtm"><div class="s">0–3</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">🎬 HOOK</div><div class="rvo">"Le dije a mi mamá que le tenía una sorpresa..."</div><div class="rov"><strong>"Le dije a mi mamá que le tenía algo..." 🥺</strong></div><div class="rvi">Close-up de manos envolviendo un moño rojo. Cámara en mano, estilo UGC. Se oye de fondo "¿qué es, mijo?"</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">3–10</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">😢 PROBLEMA</div><div class="rvo">"Desde que le fallaron las rodillas, ya no salía ni al patio. Se le veía triste, apagada."</div><div class="rov"><strong>"6 meses sin salir de casa..."</strong></div><div class="rvi">Tomas suaves de señora mayor sentada junto a la ventana, viendo hacia afuera. Iluminación natural, tono cálido.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">10–20</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">✨ PRODUCTO</div><div class="rvo">"Hasta que encontré la Andafacil Pro. Es eléctrica, todo terreno, y se controla con un joystick."</div><div class="rov"><strong>Andafacil Pro — $16,999 · Llantas todo terreno 🇲🇽 · Soporta 136 kg</strong></div><div class="rvi">Revelación: mamá ve la silla. Se sienta. Presiona el joystick. Sale al patio sonriendo. Tomas de las llantas en la banqueta.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">20–27</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">🌟 PRUEBA SOCIAL</div><div class="rvo">"Y no soy el único. Miles de familias ya confían en Andafacil."</div><div class="rov"><strong>⭐⭐⭐⭐⭐ "Muy buena calidad" — Carlos R.</strong></div><div class="rvi">Montaje rápido de fotos/clips de otros clientes. Estrellas animadas.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">27–30</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">📲 CTA</div><div class="rvo">"Envío gratis a todo México. Escríbenos por WhatsApp."</div><div class="rov"><strong>Envío GRATIS 🚚 · 📲 WhatsApp · Logo Andafacil</strong></div><div class="rvi">Pack shot del producto con precio tachado. Botón de WhatsApp animado.</div></div>
+</div></div><div class="rs">
+<div class="rtb"><span>✈️</span><h3>EasyGo Portátil — "Que vuelva a viajar"</h3><span class="rfm">9:16 · 30s</span></div>
+<div class="rf">
+<div class="rtm"><div class="s">0–3</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">🎬 HOOK</div><div class="rvo">"Mi mamá no viajaba desde hace 3 años..."</div><div class="rov"><strong>"Mi mamá no viajaba hace 3 años..." 😔</strong></div><div class="rvi">Close-up de maleta siendo empacada. Foto familiar vieja sobre la cama. Estilo UGC, cámara en mano.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">3–10</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">😢 EMOCIÓN</div><div class="rvo">"Cada vez que planeábamos algo, decía: Vayan sin mí, yo los espero aquí. Se me partía el corazón."</div><div class="rov"><strong>"Vayan sin mí..." 💔</strong></div><div class="rvi">La mamá sentada en la sala viendo a la familia preparar maletas. Tono melancólico pero digno.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">10–20</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">✨ PRODUCTO</div><div class="rvo">"Hasta que encontré la EasyGo de Andafacil. Pesa solo 16 kilos, se dobla en un segundo, y la puedes subir al avión."</div><div class="rov"><strong>Andafacil EasyGo ✈️ · Solo 16 kg · Se pliega en 1 segundo · $19,999</strong></div><div class="rvi">La silla siendo desdoblada (toma satisfying). La mamá sentándose. Plegándola y metiéndola a la cajuela. Toma en aeropuerto.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">20–27</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">🌟 MOMENTO EMOCIONAL</div><div class="rvo">"La primera vez que mi mamá vio la playa desde su silla... no dejaba de sonreír."</div><div class="rov"><strong>⭐⭐⭐⭐⭐ "No pesa, fácil de cerrar, resistente" — Pam O.</strong></div><div class="rvi">La mamá en la EasyGo en un malecón/playa. Sonrisa genuina. Familia caminando a su lado. Tomas de atardecer.</div></div>
+</div><div class="rf">
+<div class="rtm"><div class="s">27–30</div><div class="l">seg</div></div>
+<div class="rct"><div class="rel">📲 CTA</div><div class="rvo">"Andafacil EasyGo. Que vuelva a viajar contigo."</div><div class="rov"><strong>Antes $34,999 → $19,999 · Envío GRATIS 🚚 · 📲 WhatsApp</strong></div><div class="rvi">Pack shot con precio tachado. Logo. Botón WhatsApp.</div></div>
+</div></div></div></div>
+<script>
+function switchTab(t) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + t).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
